@@ -189,6 +189,7 @@
     const mid = scrollY + innerHeight * 0.4;
     let i = 0;
     navTargets.forEach((el, k) => { if (topOf(el) <= mid) i = k; });
+    if (scrollY >= document.documentElement.scrollHeight - innerHeight - 2) i = navTargets.length - 1;  // 맨 끝이면 마지막 점
     if (i === cur) return;
     cur = i;
     dots.forEach((d, k) => d.classList.toggle('on', k === i));
