@@ -16,21 +16,18 @@
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
 <link rel="stylesheet" href="assets/common.css?v=202611251539">
 <style>
-  /* 마루부리: 굵기별 파일을 한 이름(Maru)으로 묶어 굵은 글씨도 진짜 굵은 서체로 */
-  @font-face { font-family: 'Maru'; font-weight: 300; font-display: swap; src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Light.woff2) format('woff2'); }
-  @font-face { font-family: 'Maru'; font-weight: 400; font-display: swap; src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Regular.woff2) format('woff2'); }
-  @font-face { font-family: 'Maru'; font-weight: 600; font-display: swap; src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-SemiBold.woff2) format('woff2'); }
-  @font-face { font-family: 'Maru'; font-weight: 700; font-display: swap; src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Bold.woff2) format('woff2'); }
   :root {
     --bg: #f7f3ea; --text: #33403a; --muted: #7d867f; --accent: #2f5641; --gold: #b6975a; --line: #e2dccd; --sub: #eee8da;
-    --green: #2f5641; --green-2: #446f57; --font-body: 'Maru', serif; --en: 'Cormorant Garamond', serif;
+    --green: #2f5641; --green-2: #446f57; --font-body: 'Pretendard Variable', Pretendard, -apple-system, sans-serif; --en: 'DM Serif Display', serif;
     --radius: 14px; --outer: #e4dfd2; --sun: #b5694f; --pager-on: #b6975a;
   }
   section { padding: 88px 28px; }
   .en { font-family: var(--en); }
+  .wrap { font-weight: 450; letter-spacing: -.015em; }   /* Pretendard: 살짝 도톰하고 촘촘하게 */
 
   /* 종이 질감 (아주 옅은 노이즈) */
   :root { --paper: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .3 0 0 0 0 .25 0 0 0 0 .15 .1 0 0 0 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
@@ -44,14 +41,14 @@
 
   /* 섹션 머리: 음악 + 골프 용어 */
   .sec-head { margin-bottom: 40px; }
-  .sec-head .kicker { font-family: var(--en); font-style: italic; color: var(--gold); font-size: 18px; }
-  .sec-head h2 { font-family: var(--en); font-weight: 500; font-size: 38px; color: var(--accent); line-height: 1.2; }
+  .sec-head .kicker { font-family: var(--en); font-style: italic; color: var(--gold); font-size: 16px; }
+  .sec-head h2 { font-family: var(--en); font-weight: 400; font-size: 34px; color: var(--accent); line-height: 1.2; }
   .sec-head p { font-size: 14px; color: var(--muted); margin-top: 6px; }
 
   /* 메인 */
   .hero { text-align: center; padding: 72px 0 0; position: relative; }
-  .hero .kicker { font-family: var(--en); font-style: italic; color: var(--gold); font-size: 19px; animation: up 1s .2s both; }
-  .hero h1 { font-family: var(--en); font-weight: 500; font-size: 54px; line-height: 1.05; color: var(--accent); margin-top: 6px; animation: up 1s .35s both; }
+  .hero .kicker { font-family: var(--en); font-style: italic; color: var(--gold); font-size: 17px; animation: up 1s .2s both; }
+  .hero h1 { font-family: var(--en); font-weight: 400; font-size: 48px; line-height: 1.05; color: var(--accent); margin-top: 6px; animation: up 1s .35s both; }
   .hero h1 em { font-style: italic; color: var(--gold); }
   .hero-photo { margin: 36px 28px 0; position: relative; animation: up 1.2s .5s both; }
   .hero-photo img { width: 100%; aspect-ratio: 4/5; object-fit: cover; border-radius: 200px 200px 14px 14px; }
@@ -75,7 +72,7 @@
   }
   @keyframes up { from { opacity: 0; transform: translateY(14px); } }
   .green-band { background: var(--green); color: #f1ece0; padding: 28px 28px 40px; text-align: center; margin-top: -2px; }
-  .green-band .names { font-size: 22px; letter-spacing: .12em; }
+  .green-band .names { font-size: 22px; font-weight: 600; letter-spacing: .04em; }
   .green-band .names span { font-family: var(--en); font-style: italic; color: var(--gold); margin: 0 12px; letter-spacing: 0; }
   .green-band .info { font-size: 14px; opacity: .8; margin-top: 8px; line-height: 1.9; }
 
@@ -98,21 +95,21 @@
   .pcard .nm { font-size: 19px; font-weight: 700; margin: 2px 0 10px; }
   .pcard .par { font-size: 12px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 10px; }
   .pcard .role { font-family: var(--font-body); font-style: normal; letter-spacing: .2em; font-size: 12px; }
-  .sec-head h2.ko { font-family: var(--font-body); font-size: 22px; font-weight: 400; letter-spacing: .05em; margin-top: 2px; }
+  .sec-head h2.ko { font-family: var(--font-body); font-size: 22px; font-weight: 700; letter-spacing: -.01em; margin-top: 2px; }
 
   /* 일시 */
   .tee { background: var(--green); color: #f1ece0; }
   .tee .sec-head h2 { color: #f7f3ea; }
   .tee .sec-head p { color: rgba(241,236,224,.7); }
   .cal-card { background: #f7f3ea; color: var(--text); border-radius: var(--radius); padding: 22px 12px 14px; }
-  .cal-card .m { font-family: var(--en); font-weight: 500; font-size: 24px; color: var(--accent); margin-bottom: 6px; }
+  .cal-card .m { font-family: var(--en); font-weight: 400; font-size: 21px; color: var(--accent); margin-bottom: 6px; }
   .cal-body .on { color: #fff; }
   .cal-body .on::after { content: ''; position: absolute; left: 50%; top: -3px; width: 2px; height: 14px; background: var(--gold); margin-left: 9px; }
   .cal-body .on::before { background: var(--green); }
   .cal-flag { position: absolute; }
   .countdown { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 20px; }
   .countdown div { border: 1px solid rgba(241,236,224,.25); border-radius: 10px; padding: 12px 0 8px; }
-  .countdown b { font-family: var(--en); font-weight: 500; font-size: 30px; display: block; line-height: 1.2; }
+  .countdown b { font-family: var(--en); font-weight: 400; font-size: 27px; display: block; line-height: 1.2; }
   .countdown small { font-size: 10px; letter-spacing: .2em; opacity: .6; }
   .tee .note-line { margin-top: 24px; font-size: 14px; }
   .tee .note-line strong { color: var(--gold); }
@@ -143,7 +140,7 @@
 
   footer { background: var(--green); color: #f1ece0; text-align: center; padding: 72px 28px 88px;
     min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; justify-content: center; }  /* 마지막 화면은 한 화면 가득: 끝 구간에서 공이 급가속하지 않게 */
-  footer h2 { font-family: var(--en); font-weight: 500; font-style: italic; font-size: 46px; color: var(--gold); }
+  footer h2 { font-family: var(--en); font-weight: 400; font-style: italic; font-size: 40px; color: var(--gold); }
   footer p { font-size: 14px; opacity: .85; margin: 12px 0 36px; line-height: 2; }
   .share { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .share button { padding: 14px 0; border-radius: 999px; font-size: 14px; border: 1px solid rgba(241,236,224,.35); }
@@ -154,7 +151,7 @@
   .gb-item { background: #fff; border-radius: var(--radius); padding: 18px 18px 16px; box-shadow: 0 10px 24px -22px rgba(47,86,65,.7); animation: up .5s both; }
   .gb-item .top { display: flex; align-items: baseline; gap: 8px; margin-bottom: 6px; }
   .gb-item .who { font-weight: 700; font-size: 15px; color: var(--accent); }
-  .gb-item .when { font-family: var(--en); font-size: 14px; color: var(--muted); }
+  .gb-item .when { font-family: var(--en); font-size: 12px; color: var(--muted); }
   .gb-item .del { margin-left: auto; font-size: 18px; line-height: 1; color: var(--muted); padding: 0 2px; }
   .gb-item .msg { font-size: 14px; line-height: 1.9; white-space: pre-wrap; word-break: break-word; }
   .gb-empty { text-align: center; font-size: 14px; color: var(--muted); padding: 24px 0; }
