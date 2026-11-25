@@ -186,8 +186,9 @@
   });
   let cur = -1, hideT;
   function update() {
-    // 기준선: 화면 위에서 40% 지점. 맨 끝에 닿으면 마지막 점
-    const mid = scrollY + innerHeight * 0.4;
+    // 기준선: 기본은 화면 위에서 40% 지점 (WEDDING.navLine 으로 바꿀 수 있음). 맨 끝에 닿으면 마지막 점
+    const line = (window.WEDDING && typeof WEDDING.navLine === 'number') ? WEDDING.navLine : 0.4;
+    const mid = scrollY + innerHeight * line + 2;   // +2: 반올림 오차 허용
     let i = 0;
     navTargets.forEach((el, k) => { if (topOf(el) <= mid) i = k; });
     if (scrollY >= document.documentElement.scrollHeight - innerHeight - 2) i = navTargets.length - 1;
