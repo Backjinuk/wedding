@@ -136,7 +136,7 @@
   /* 오선지 구분선 */
   .staff-div { position: relative; height: 48px; display: flex; align-items: center; justify-content: center; }
   .staff-div .lines { position: absolute; left: 0; top: 50%; width: 100%; height: 30px; transform: translateY(-50%); }
-  .staff-div .clubs { position: relative; width: 40px; height: 52px; }
+  .staff-div .clubs { position: relative; width: 40px; height: 48px; }
 
   footer { background: var(--green); color: #f1ece0; text-align: center; padding: 72px 28px 88px; }
   footer h2 { font-family: var(--en); font-weight: 400; font-style: italic; font-size: 38px; color: var(--gold); }
@@ -269,31 +269,19 @@
   <!-- 오선지 위의 이어진 8분음표 두 개(♫)를 골프채로: 헤드=음표 머리, 샤프트=기둥, 그립을 잇는 들보 -->
   <div class="staff-div" aria-hidden="true">
     <svg class="lines" viewBox="0 0 430 30" preserveAspectRatio="none"><g stroke="#d9cfb8" stroke-width="1"><line x1="0" y1="3" x2="430" y2="3"/><line x1="0" y1="9" x2="430" y2="9"/><line x1="0" y1="15" x2="430" y2="15"/><line x1="0" y1="21" x2="430" y2="21"/><line x1="0" y1="27" x2="430" y2="27"/></g></svg>
-    <svg class="clubs" viewBox="0 0 80 104">
+    <svg class="clubs" viewBox="2 0 40 48">
+      <!-- 같은 음 높이의 ♫. 작은 크기에서 또렷하도록 단색 실루엣으로: 헤드=음표 머리, 샤프트=기둥, 두꺼운 그립 위를 들보가 이음 -->
       <defs>
-        <linearGradient id="clubShaft" x1="0" x2="1"><stop offset="0" stop-color="#8f7a4e"/><stop offset=".5" stop-color="#e6d3a2"/><stop offset="1" stop-color="#9c8450"/></linearGradient>
-        <linearGradient id="clubHead" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dcc48e"/><stop offset=".55" stop-color="#b6975a"/><stop offset="1" stop-color="#8a6f3d"/></linearGradient>
-        <!-- 아이언 헤드 = 음표 머리. 원점은 호젤(목) 아래, 헤드는 왼쪽으로 -->
-        <g id="noteHead">
-          <path d="M-.8 -8 L.8 -8 L1.7 -2 L-1.4 -2 Z" fill="#a8884c"/>
-          <path d="M1.6 -2 L1.8 2.2 Q1.6 3.8 -.6 3.9 L-10.8 4 Q-14.6 3.8 -14.8 .6 Q-14.8 -2.6 -11.6 -4 Q-6.5 -6.2 -.5 -4.6 Z" fill="url(#clubHead)"/>
-          <path d="M-12 -1 L-1.2 -2.3 M-12.8 1 L-1 .4 M-12 2.8 L-1.2 2.6" stroke="#f6edd6" stroke-width=".45" opacity=".9"/>
+        <g id="noteClub">
+          <rect x="14.35" y="9" width="1.3" height="13.5" fill="#b6975a"/>
+          <rect x="13.85" y="4" width="2.3" height="8" rx=".5" fill="#9c7c3f"/>
+          <path d="M14.3 21.5 L15.7 21.5 L16.3 25.2 Q16.6 27.8 15.2 29.2 Q14.2 30 12 30 L7.6 30 Q4.6 30 4.4 27.6 Q4.3 26 6.6 25.2 Q9.6 24.3 14 24.4 Z" fill="#b6975a"/>
+          <path d="M6.8 27 L13.6 26.6 M7 28.6 L13.6 28.3" stroke="#f1e6c8" stroke-width=".5" stroke-linecap="round"/>
         </g>
       </defs>
-      <!-- 샤프트 = 음표 기둥 (아래로 갈수록 가늘어짐) -->
-      <path d="M28.9 30.6 L31.1 30.6 L30.7 52.2 L29.3 52.2 Z" fill="url(#clubShaft)"/>
-      <path d="M54.9 21.6 L57.1 21.6 L56.7 43.2 L55.3 43.2 Z" fill="url(#clubShaft)"/>
-      <!-- 헤드 = 음표 머리 -->
-      <use href="#noteHead" transform="translate(30 60) rotate(-10)"/>
-      <use href="#noteHead" transform="translate(56 51) rotate(-10)"/>
-      <!-- 그립 + 들보: 두 그립을 잇는 들보로 '이어진 두 사람'을 표현 -->
-      <rect x="27.6" y="17" width="4.8" height="13" rx="1.4" fill="#2f5641"/>
-      <rect x="53.6" y="8" width="4.8" height="13" rx="1.4" fill="#2f5641"/>
-      <path d="M27.7 24.5 l4.6 -2 M27.7 28.5 l4.6 -2 M53.7 15.5 l4.6 -2 M53.7 19.5 l4.6 -2" stroke="#5b8a70" stroke-width=".7"/>
-      <rect x="28" y="29.4" width="4" height="1.6" rx=".5" fill="#1f3a2b"/>
-      <rect x="54" y="20.4" width="4" height="1.6" rx=".5" fill="#1f3a2b"/>
-      <path d="M27.6 15.4 L58.4 6.4 L58.4 12.2 L27.6 21.2 Z" fill="#2f5641"/>
-      <path d="M29 16.6 L57 8.4" stroke="#b6975a" stroke-width=".6" opacity=".8"/>
+      <use href="#noteClub"/>
+      <use href="#noteClub" x="20"/>
+      <rect x="13.85" y="4" width="22.3" height="3.6" rx=".4" fill="#b6975a"/>
     </svg>
   </div>
 
