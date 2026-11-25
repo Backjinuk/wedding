@@ -1,6 +1,6 @@
 /* 공통 베이스 — 각 시안에서 :root 변수로 색/폰트만 바꿈 */
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html { -webkit-text-size-adjust: 100%; scrollbar-width: none; }
+html { -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; scrollbar-width: none; }
 html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; }
 body { background: var(--outer, #e9e6e1); color: var(--text); font-family: var(--font-body); line-height: 1.8; word-break: keep-all; }
 img { display: block; max-width: 100%; }
@@ -36,7 +36,7 @@ section { padding: 80px 28px; text-align: center; }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
 /* 라이트박스 */
-.lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.92); display: none; align-items: center; justify-content: center; z-index: 90; }
+.lightbox { touch-action: none; position: fixed; inset: 0; background: rgba(0,0,0,.92); display: none; align-items: center; justify-content: center; z-index: 90; }
 .lightbox.open { display: flex; }
 .lightbox img { max-width: 100%; max-height: 85vh; object-fit: contain; }
 .lightbox button { position: absolute; color: #fff; font-size: 36px; width: 48px; height: 48px; }
