@@ -134,7 +134,9 @@
   .copy-btn { color: var(--accent); }
 
   /* 오선지 구분선 */
-  .staff-div { display: block; width: 100%; height: 48px; }
+  .staff-div { position: relative; height: 104px; display: flex; align-items: center; justify-content: center; }
+  .staff-div .lines { position: absolute; left: 0; top: 50%; width: 100%; height: 30px; transform: translateY(-50%); }
+  .staff-div .clubs { position: relative; width: 118px; height: auto; }
 
   footer { background: var(--green); color: #f1ece0; text-align: center; padding: 72px 28px 88px; }
   footer h2 { font-family: var(--en); font-weight: 400; font-style: italic; font-size: 38px; color: var(--gold); }
@@ -264,7 +266,41 @@
     </div>
   </section>
 
-  <svg class="staff-div" viewBox="0 0 430 48" preserveAspectRatio="none" aria-hidden="true"><g stroke="#d9cfb8" stroke-width="1"><line x1="0" y1="12" x2="430" y2="12"/><line x1="0" y1="18" x2="430" y2="18"/><line x1="0" y1="24" x2="430" y2="24"/><line x1="0" y1="30" x2="430" y2="30"/><line x1="0" y1="36" x2="430" y2="36"/></g><g fill="#b6975a"><ellipse cx="200" cy="27" rx="4.5" ry="3.2"/><rect x="203.6" y="6" width="1.2" height="21"/><ellipse cx="230" cy="21" rx="4.5" ry="3.2"/><rect x="233.6" y="0" width="1.2" height="21"/></g></svg>
+  <!-- 오선지 위에 교차한 골프채(아이언 + 드라이버)와 티 위의 공 -->
+  <div class="staff-div" aria-hidden="true">
+    <svg class="lines" viewBox="0 0 430 30" preserveAspectRatio="none"><g stroke="#d9cfb8" stroke-width="1"><line x1="0" y1="3" x2="430" y2="3"/><line x1="0" y1="9" x2="430" y2="9"/><line x1="0" y1="15" x2="430" y2="15"/><line x1="0" y1="21" x2="430" y2="21"/><line x1="0" y1="27" x2="430" y2="27"/></g></svg>
+    <svg class="clubs" viewBox="0 0 120 92">
+      <defs>
+        <linearGradient id="clubShaft" x1="0" x2="1"><stop offset="0" stop-color="#8f7a4e"/><stop offset=".5" stop-color="#e6d3a2"/><stop offset="1" stop-color="#9c8450"/></linearGradient>
+        <linearGradient id="clubHead" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d9c08a"/><stop offset=".55" stop-color="#b6975a"/><stop offset="1" stop-color="#8a6f3d"/></linearGradient>
+        <g id="clubBody">
+          <rect x="-2.3" y="-80" width="4.6" height="23" rx="2.2" fill="#2f5641"/>
+          <path d="M-2.2 -75.5 l4.4 -2.1 M-2.2 -70.5 l4.4 -2.1 M-2.2 -65.5 l4.4 -2.1 M-2.2 -60.5 l4.4 -2.1" stroke="#5b8a70" stroke-width=".7"/>
+          <rect x="-1.6" y="-57.6" width="3.2" height="2" rx=".5" fill="#1f3a2b"/>
+          <path d="M-1.2 -55.6 L1.2 -55.6 L.75 -9 L-.75 -9 Z" fill="url(#clubShaft)"/>
+        </g>
+        <g id="iron">
+          <use href="#clubBody"/>
+          <path d="M-.9 -10 L.9 -10 L1.8 -2.5 L-1.8 -2.5 Z" fill="#a8884c"/>
+          <path d="M-2.2 -3.2 L14.5 -7 Q18 -7.6 18.2 -4 L18 1 Q17.6 3 14.6 3 L-1.6 3 Q-3.2 3 -3 1 Z" fill="url(#clubHead)"/>
+          <path d="M2 -2.6 L14.6 -4.8 M2 -.7 L15 -2.2 M2.2 1.2 L15.2 .5" stroke="#f6edd6" stroke-width=".5" opacity=".9"/>
+        </g>
+        <g id="driver">
+          <use href="#clubBody"/>
+          <path d="M-.9 -12 L.9 -12 L1.5 -3 L-1.5 -3 Z" fill="#a8884c"/>
+          <path d="M-2.2 -3.5 Q3 -10.5 12.5 -10 Q20 -9.4 20.2 -3.2 Q20.2 2.6 13 3.2 L-1.4 3.2 Q-3.2 3 -3 .8 Z" fill="url(#clubHead)"/>
+          <path d="M3 -6.8 Q9 -9 15.5 -7.6" stroke="#f6edd6" stroke-width=".7" fill="none" opacity=".85"/>
+          <path d="M0 1.5 L15.5 1.6" stroke="#7d6334" stroke-width=".5"/>
+        </g>
+      </defs>
+      <use href="#driver" transform="translate(46 74) scale(-1 1) rotate(-28)"/>
+      <use href="#iron" transform="translate(74 74) rotate(-28)"/>
+      <!-- 티와 공 -->
+      <path d="M56.8 84.6 L63.2 84.6 L61 86.4 L60.6 91.5 L59.4 91.5 L59 86.4 Z" fill="#c9ad74"/>
+      <circle cx="60" cy="80" r="4.6" fill="#fff" stroke="#b6975a" stroke-width=".7"/>
+      <g fill="#e4dccb"><circle cx="58.4" cy="78.6" r=".55"/><circle cx="60.6" cy="77.9" r=".55"/><circle cx="62.2" cy="79.6" r=".55"/><circle cx="59.3" cy="80.9" r=".55"/><circle cx="61.4" cy="81.6" r=".55"/><circle cx="57.6" cy="81" r=".5"/></g>
+    </svg>
+  </div>
 
   <!-- 신랑 신부 -->
   <section>
