@@ -440,8 +440,8 @@
     kakaoKey: '',
     // 예식장 (확정되면 이름만 넣으면 지도 버튼이 연결됨)
     venue: '',
-    // 오른쪽 내비 점이 바뀌는 기준: 섹션 시작이 화면 맨 위에 올 때 (골프공 위치와 일치)
-    navLine: 0,
+    // 오른쪽 내비 점이 바뀌는 기준: 다음 섹션이 화면 위 20%까지 올라왔을 때 (공이 다음 점으로 반쯤 굴러간 순간)
+    navLine: 0.2,
   };
 
   // 바텀시트 공통: 바깥 누르면 닫힘
@@ -545,7 +545,6 @@
     const topOf = (el) => el.getBoundingClientRect().top + scrollY;
 
     // 공은 '섹션 시작이 화면 맨 위에 올 때' 그 섹션 점에 정확히 도착함 (점을 눌러 이동했을 때와 일치)
-    const readLine = () => scrollY;
     let xs = [], ys = [];   // 스크롤 위치(섹션 시작) → 공 위치(점)
     function measure() {
       const last = dots[dots.length - 1];
@@ -559,16 +558,18 @@
       track.style.height = (cupY - ys[0]) + 'px';
       place();
     }
+    // 공은 지금 보고 있는 섹션의 점에 머물러 있다가,
+    // 다음 섹션이 아래에서 올라와 화면 위 40% → 맨 위까지 오는 동안에만 다음 점으로 굴러감
     function place() {
-      const p = readLine(), n = xs.length;
-      let pos = ys[n - 1], cup = 1;
-      for (let k = 0; k < n - 1; k++) {
-        if (p < xs[k + 1]) {
-          const t = Math.max(0, (p - xs[k]) / (xs[k + 1] - xs[k]));
-          pos = ys[k] + (ys[k + 1] - ys[k]) * t;
-          cup = k === n - 2 ? Math.max(0, (t - 0.8) / 0.2) : 0;   // 마지막 구간 끝에서 작아지며 홀컵으로
-          break;
-        }
+      const y = scrollY, n = xs.length, W = innerHeight * 0.4;
+      let k = 0;
+      for (let j = 1; j < n; j++) if (y >= xs[j] - 0.5) k = j;   // 이미 화면 맨 위를 지난 섹션
+      let pos = ys[k], cup = k === n - 1 ? 1 : 0;
+      if (k < n - 1) {
+        const t = Math.min(1, Math.max(0, (y + W - xs[k + 1]) / W));
+        const ease = t * t * (3 - 2 * t);   // 부드럽게 출발/도착
+        pos = ys[k] + (ys[k + 1] - ys[k]) * ease;
+        if (k === n - 2) cup = Math.max(0, (t - 0.75) / 0.25);   // 홀컵에 들어갈 때 작아짐
       }
       ball.style.transform = `translateY(${pos}px) scale(${1 - 0.3 * cup})`;
     }
