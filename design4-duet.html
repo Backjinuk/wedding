@@ -179,6 +179,59 @@
   /* 마지막 점 = 홀컵 (깃발이 꽂힘) */
   .pager button:last-of-type, .pager button:last-of-type.on { width: 10px; height: 4px; margin-top: 4px; border-radius: 50%; background: #1f3a2b; opacity: .75; }
   .pager-label { right: max(46px, calc(50% - 215px + 46px)); }
+
+  /* ───────── 마감 손질: 카드·버튼·숫자·포커스를 한 기준으로 통일 ───────── */
+  :root {
+    --card: #fffdf8;                                   /* 순백 대신 크림빛이 살짝 도는 카드 */
+    --hair: rgba(182,151,90,.16);                      /* 금색 머리카락 선 */
+    --shadow: 0 1px 2px rgba(31,58,43,.04), 0 14px 30px -24px rgba(31,58,43,.45);
+    --ease: cubic-bezier(.2,.7,.3,1);
+  }
+  /* 제목 줄바꿈 균형, 숫자는 폭을 맞춰 흔들리지 않게 */
+  .hero h1, .sec-head h2, footer h2 { text-wrap: balance; letter-spacing: -.005em; }
+  .sec-head .kicker, .hero .kicker { letter-spacing: .02em; }
+  .countdown b, .cal-body, .cal-head, .gb-item .when, .rsvp-info, .acc-row small { font-variant-numeric: tabular-nums lining-nums; }
+
+  /* 섹션 머리: 제목과 한글 부제 사이에 짧은 금색 선 */
+  .sec-head p { letter-spacing: .02em; }
+  .sec-head p::before { content: ''; display: block; width: 22px; height: 1px; margin: 14px auto 10px; background: var(--gold); opacity: .7; }
+
+  /* 카드 공통: 같은 바탕·테두리·그림자 */
+  .pcard, .gb-item, .acc, .cal-card { background: var(--card); box-shadow: var(--shadow); border: 1px solid var(--hair); }
+  .tee .cal-card { box-shadow: 0 18px 36px -26px rgba(0,0,0,.55); border-color: transparent; }
+  .pcard .badge { border-color: var(--card); box-shadow: 0 4px 10px -4px rgba(31,58,43,.5); }
+  .pcard .par { border-top-color: var(--hair); }
+
+  /* 카운트다운 칸 */
+  .countdown div { background: rgba(247,243,234,.05); border-color: rgba(241,236,224,.2); }
+  .countdown small { letter-spacing: .24em; }
+
+  /* 버튼: 누를 때 살짝 눌리는 느낌 */
+  .btn-main { font-weight: 600; letter-spacing: .02em; box-shadow: inset 0 0 0 1px rgba(182,151,90,.35), 0 10px 22px -16px rgba(31,58,43,.8); transition: transform .15s var(--ease), box-shadow .2s; }
+  .btn-main:active, .map-btns button:active, .share button:active, .copy-btn:active { transform: scale(.98); }
+  .map-btns button, .copy-btn, .share button { transition: transform .15s var(--ease), background .2s; }
+  .map-btns button { background: var(--card); border-color: var(--hair); font-weight: 500; }
+  .copy-btn { border-color: var(--hair); background: var(--bg); }
+
+  /* 키보드 포커스 표시 */
+  button:focus-visible, a:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+  .field:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(182,151,90,.18); }
+
+  /* 갤러리: 간격과 모서리를 조금 넉넉하게 */
+  .gallery { gap: 6px; }
+  .gallery img { border-radius: 8px; transition: opacity .2s; }
+  .gallery img:active { opacity: .85; }
+
+  /* 바텀시트 손잡이 */
+  .sheet { padding-top: 34px; position: relative; }
+  .sheet::before { content: ''; position: absolute; top: 12px; left: 50%; width: 36px; height: 4px; margin-left: -18px; border-radius: 2px; background: var(--line); }
+  .sheet h4 { font-weight: 700; }
+
+  /* 움직임 줄이기 설정이면 등장 효과 없이 바로 보이게 */
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .gb-item { animation: none; }
+  }
 </style>
 </head>
 <body>
