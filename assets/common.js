@@ -107,101 +107,12 @@
   document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
 })();
 
-/* 섹션 단위 스크롤 + 오른쪽 점 내비게이션 (시안 공통)
-   - 섹션(화면 한 장)마다 한 번만 멈춤
-   - 화면보다 긴 섹션은 안에서 자연스럽게 스크롤되고, 끝에 닿으면 다음 섹션으로 넘어감 */
+/* 오른쪽 점 내비게이션 (시안 공통) — 스크롤은 브라우저 기본 동작 그대로 */
 (function () {
   const wrap = document.querySelector('.wrap');
   if (!wrap) return;
-  const MIN_PANEL = 120;   // 이보다 낮은 요소(구분선 등)는 섹션으로 치지 않음
-  const DURATION = 700;
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  const panels = () => Array.from(wrap.children).filter((el) => el.offsetHeight >= MIN_PANEL);
+  const panels = () => Array.from(wrap.children).filter((el) => el.offsetHeight >= 120);
   const topOf = (el) => el.getBoundingClientRect().top + scrollY;
-  const maxY = () => document.documentElement.scrollHeight - innerHeight;
-
-  let animating = false;
-  function scrollToY(y) {
-    y = Math.min(Math.max(0, Math.round(y)), maxY());
-    if (reduce) { scrollTo(0, y); return; }
-    const from = scrollY, d = y - from, t0 = performance.now();
-    if (Math.abs(d) < 2) return;
-    animating = true;
-    const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
-    (function step(now) {
-      const p = Math.min(1, (now - t0) / DURATION);
-      scrollTo(0, from + d * ease(p));
-      if (p < 1) requestAnimationFrame(step); else animating = false;
-    })(t0);
-  }
-
-  // dir 방향으로 갈 목표 위치. null이면 긴 섹션 안이라 기본 스크롤에 맡김
-  function plan(dir) {
-    const ps = panels(), y = scrollY, vh = innerHeight;
-    let i = 0;
-    ps.forEach((p, k) => { if (topOf(p) <= y + 5) i = k; });
-    const t = topOf(ps[i]), b = t + ps[i].offsetHeight;
-    if (dir > 0) {
-      if (b > y + vh + 5) return null;
-      return ps[i + 1] ? topOf(ps[i + 1]) : maxY();
-    }
-    if (t < y - 5) return null;
-    const prev = ps[i - 1];
-    if (!prev) return 0;
-    const pt = topOf(prev);
-    return Math.max(pt, pt + prev.offsetHeight - vh);  // 긴 섹션이면 그 끝 화면으로
-  }
-
-  const blocked = () => document.querySelector('.modal.open, .lightbox.open');
-
-  // 마우스 휠 / 트랙패드: 한 번의 제스처에 한 섹션만 이동
-  let lastWheel = 0, consumed = false, native = false, acc = 0;
-  addEventListener('wheel', (e) => {
-    if (blocked() || e.ctrlKey) return;
-    const now = Date.now(), gap = now - lastWheel;
-    lastWheel = now;
-    if (gap > 220) { consumed = false; native = false; acc = 0; }
-    if (native) return;
-    if (animating || consumed) { e.preventDefault(); return; }
-    const dir = Math.sign(e.deltaY);
-    if (!dir) return;
-    const target = plan(dir);
-    if (target === null) { native = true; return; }
-    e.preventDefault();
-    acc += e.deltaY;
-    if (Math.abs(acc) > 25) { scrollToY(target); consumed = true; acc = 0; }
-  }, { passive: false });
-
-  // 터치: 세로 스와이프만 처리, 가로 스와이프(갤러리 슬라이더)는 그대로 둠
-  let sx = 0, sy = 0, mode = null, target = null;
-  addEventListener('touchstart', (e) => {
-    sx = e.touches[0].clientX; sy = e.touches[0].clientY; mode = null;
-  }, { passive: true });
-  addEventListener('touchmove', (e) => {
-    if (blocked()) return;
-    const dx = e.touches[0].clientX - sx, dy = e.touches[0].clientY - sy;
-    if (mode === null && (Math.abs(dx) > 6 || Math.abs(dy) > 6)) {
-      if (Math.abs(dx) >= Math.abs(dy)) mode = 'x';
-      else { target = plan(dy < 0 ? 1 : -1); mode = target === null ? 'native' : 'snap'; }
-    }
-    if (mode === 'snap') e.preventDefault();
-  }, { passive: false });
-  addEventListener('touchend', (e) => {
-    if (blocked() || mode !== 'snap' || animating) return;
-    if (Math.abs(e.changedTouches[0].clientY - sy) > 40) scrollToY(target);
-  });
-
-  // 키보드
-  addEventListener('keydown', (e) => {
-    if (blocked() || /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) return;
-    const dir = ['ArrowDown', 'PageDown', ' '].includes(e.key) ? 1 : ['ArrowUp', 'PageUp'].includes(e.key) ? -1 : 0;
-    if (!dir) return;
-    const t = plan(dir);
-    if (t === null) return;
-    e.preventDefault();
-    if (!animating) scrollToY(t);
-  });
 
   // 오른쪽 점 내비게이션
   const navTargets = panels().filter((el) => /^(HEADER|SECTION|FOOTER)$/.test(el.tagName));
@@ -221,7 +132,7 @@
   const dots = navTargets.map((el) => {
     const b = document.createElement('button');
     b.setAttribute('aria-label', labelOf(el));
-    b.addEventListener('click', () => scrollToY(topOf(el)));
+    b.addEventListener('click', () => scrollTo({ top: topOf(el), behavior: 'smooth' }));
     pager.appendChild(b);
     return b;
   });

@@ -60,9 +60,3 @@ section { padding: 80px 28px; text-align: center; }
 .pager-label { position: fixed; right: max(28px, calc(50% - 215px + 28px)); transform: translate(6px, -50%); z-index: 55; font-size: 11px; letter-spacing: .08em; padding: 4px 10px; border-radius: 999px; background: var(--pager-label-bg, rgba(255,255,255,.92)); color: var(--text); box-shadow: 0 2px 10px -4px rgba(0,0,0,.25); opacity: 0; pointer-events: none; transition: opacity .3s, transform .3s; white-space: nowrap; }
 .pager-label.show { opacity: 1; transform: translate(0, -50%); }
 
-/* 섹션 = 화면 한 장. 내용은 세로 가운데 정렬 */
-.wrap > header, .wrap > section, .wrap > footer, .wrap > .interlude {
-  min-height: 100vh; min-height: 100svh;
-  display: flex; flex-direction: column; justify-content: center;
-}
-.dday-pill, .more-btn { align-self: center; }
