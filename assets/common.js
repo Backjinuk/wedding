@@ -186,10 +186,11 @@
   });
   let cur = -1, hideT;
   function update() {
-    const mid = scrollY + innerHeight * 0.4;
+    // 읽는 기준선: 처음엔 화면 맨 위, 끝에선 맨 아래 (짧은 마지막 섹션도 활성화되고 점이 갑자기 튀지 않음)
+    const max = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+    const mid = scrollY + innerHeight * Math.min(1, scrollY / max);
     let i = 0;
     navTargets.forEach((el, k) => { if (topOf(el) <= mid) i = k; });
-    if (scrollY >= document.documentElement.scrollHeight - innerHeight - 2) i = navTargets.length - 1;  // 맨 끝이면 마지막 점
     if (i === cur) return;
     cur = i;
     dots.forEach((d, k) => d.classList.toggle('on', k === i));
