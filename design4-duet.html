@@ -136,7 +136,8 @@
   /* 오선지 구분선 */
   .staff-div { display: block; width: 100%; height: 48px; }
 
-  footer { background: var(--green); color: #f1ece0; text-align: center; padding: 72px 28px 88px; }
+  footer { background: var(--green); color: #f1ece0; text-align: center; padding: 72px 28px 88px;
+    min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; justify-content: center; }  /* 마지막 화면은 한 화면 가득: 끝 구간에서 공이 급가속하지 않게 */
   footer h2 { font-family: var(--en); font-weight: 400; font-style: italic; font-size: 38px; color: var(--gold); }
   footer p { font-size: 14px; opacity: .85; margin: 12px 0 36px; line-height: 2; }
   .share { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -174,7 +175,7 @@
     background: radial-gradient(circle, rgba(0,0,0,.18) 0 .6px, transparent 1px) 0 0 / 3px 3px; }
   .pager .gflag { position: absolute; left: 50%; margin-left: -2px; width: 14px; height: 20px; pointer-events: none; transform-origin: 2px 18.6px; transform: rotate(14deg) scale(.85); }
   /* 마지막 점 = 홀컵 (깃발이 꽂힘) */
-  .pager button:last-of-type, .pager button:last-of-type.on { width: 10px; height: 4px; margin-top: 14px; border-radius: 50%; background: #1f3a2b; opacity: .75; }
+  .pager button:last-of-type, .pager button:last-of-type.on { width: 10px; height: 4px; margin-top: 4px; border-radius: 50%; background: #1f3a2b; opacity: .75; }
   .pager-label { right: max(46px, calc(50% - 215px + 46px)); }
 </style>
 </head>
@@ -541,20 +542,17 @@
     const cy = (el) => { const r = el.getBoundingClientRect(); return r.top + r.height / 2 - base(); };
     const topOf = (el) => el.getBoundingClientRect().top + scrollY;
 
-    // 읽는 기준선: 스크롤 진행률에 따라 화면 맨 위(처음) → 맨 아래(끝)로 이동.
-    // 이렇게 하면 화면보다 짧은 마지막 섹션도 제 위치에 도달하고, 공이 끝에서 급가속하지 않음
-    const readLine = () => {
-      const max = Math.max(1, document.documentElement.scrollHeight - innerHeight);
-      return scrollY + innerHeight * Math.min(1, scrollY / max);
-    };
-    let xs = [], ys = [];   // 문서 위치(섹션 시작) → 공 위치(점)
+    // 공은 '섹션 시작이 화면 맨 위에 올 때' 그 섹션 점에 정확히 도착함 (점을 눌러 이동했을 때와 일치)
+    const readLine = () => scrollY;
+    let xs = [], ys = [];   // 스크롤 위치(섹션 시작) → 공 위치(점)
     function measure() {
       const last = dots[dots.length - 1];
       const cupY = cy(last);
       flag.style.top = (cupY - 18.6) + 'px';   // 깃대 밑동을 마지막 점(홀컵)에 꽂음
-      xs = secs.map((el) => Math.max(0, topOf(el)));
+      const max = document.documentElement.scrollHeight - innerHeight;
+      xs = secs.map((el) => Math.min(Math.max(0, topOf(el)), max));
       ys = dots.map(cy);
-      xs[xs.length - 1] = document.documentElement.scrollHeight;   // 마지막 점(홀컵)은 문서 끝에서 도착
+      xs[xs.length - 1] = max;                 // 맨 끝 = 마지막 화면(Encore)이 꽉 찬 상태 = 홀컵
       track.style.top = ys[0] + 'px';
       track.style.height = (cupY - ys[0]) + 'px';
       place();
