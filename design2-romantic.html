@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>길동 ♥ 정은 결혼합니다</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Gowun+Batang:wght@400;700&family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/common.css">
+<style>
+  :root {
+    --bg: #fbf6f1; --text: #5b4a42; --accent: #c98f8a; --line: #ead9cf; --sub: #f5ebe3;
+    --font-body: 'Gowun Batang', serif; --radius: 16px; --sun: #c98f8a;
+    --outer: #efe4da;
+  }
+  .script { font-family: 'Great Vibes', cursive; color: var(--accent); }
+  h2.title { font-family: 'Great Vibes', cursive; font-weight: 400; font-size: 38px; color: var(--accent); line-height: 1.2; }
+  h3.sub { font-size: 14px; font-weight: 400; opacity: .7; margin-bottom: 36px; letter-spacing: .1em; }
+
+  /* 꽃잎 */
+  .petals { position: fixed; inset: 0; pointer-events: none; z-index: 5; overflow: hidden; max-width: 430px; margin: 0 auto; }
+  .petals i { position: absolute; top: -20px; width: 10px; height: 12px; background: #f1c3be; border-radius: 80% 0 80% 0; opacity: .7; animation: fall linear infinite; }
+  @keyframes fall { to { transform: translate(60px, 110vh) rotate(540deg); } }
+
+  /* 메인 */
+  .hero { padding: 64px 28px 56px; text-align: center; position: relative; }
+  .hero .script-top { font-size: 30px; }
+  .arch { width: 78%; margin: 24px auto 0; border-radius: 999px 999px 0 0; overflow: hidden; aspect-ratio: 3/4.2; box-shadow: 0 20px 40px -20px rgba(150,100,90,.4); border: 6px solid #fff; }
+  .arch img { width: 100%; height: 100%; object-fit: cover; }
+  .hero .names { margin-top: 32px; font-size: 22px; letter-spacing: .15em; }
+  .hero .names span { font-family: 'Great Vibes'; color: var(--accent); font-size: 28px; margin: 0 10px; letter-spacing: 0; }
+  .hero .when { font-size: 14px; margin-top: 8px; opacity: .8; }
+
+  /* 인사말 카드 */
+  .card { background: #fff; border-radius: var(--radius); padding: 44px 24px; box-shadow: 0 10px 30px -18px rgba(150,100,90,.35); }
+  .poem { font-size: 15px; line-height: 2.3; }
+  .hand { font-family: 'Nanum Pen Script', cursive; font-size: 24px; color: var(--accent); margin-top: 20px; }
+
+  /* 신랑신부 소개 */
+  .couple { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 8px; }
+  .person img { width: 100%; aspect-ratio: 1; border-radius: 50%; object-fit: cover; border: 4px solid #fff; box-shadow: 0 8px 20px -12px rgba(150,100,90,.5); }
+  .person .role { font-size: 12px; color: var(--accent); margin-top: 14px; letter-spacing: .2em; }
+  .person .nm { font-size: 18px; font-weight: 700; }
+  .person .parents { font-size: 12px; opacity: .7; line-height: 1.7; margin-top: 4px; }
+
+  /* 일시 */
+  .calendar-card { background: #fff; border-radius: var(--radius); padding: 24px 16px; margin-top: 8px; }
+  .calendar-card .month { font-size: 15px; margin-bottom: 8px; }
+  .dday-pill { display: inline-block; margin-top: 24px; background: var(--accent); color: #fff; padding: 8px 22px; border-radius: 999px; font-size: 14px; }
+
+  /* 갤러리 슬라이더 */
+  .slider { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 12px; padding: 0 28px; margin: 0 -28px; scrollbar-width: none; }
+  .slider::-webkit-scrollbar { display: none; }
+  .slider img { flex: 0 0 78%; aspect-ratio: 3/4; object-fit: cover; border-radius: var(--radius); scroll-snap-align: center; cursor: pointer; }
+  .dots { display: flex; justify-content: center; gap: 6px; margin-top: 18px; }
+  .dots i { width: 6px; height: 6px; border-radius: 50%; background: var(--line); transition: .3s; }
+  .dots i.on { background: var(--accent); width: 18px; border-radius: 3px; }
+
+  /* RSVP */
+  .rsvp-btn { display: block; width: 100%; padding: 16px; border-radius: 999px; background: var(--accent); color: #fff; font-size: 15px; margin-top: 24px; }
+  .modal { position: fixed; inset: 0; background: rgba(60,40,35,.45); display: none; align-items: flex-end; justify-content: center; z-index: 80; }
+  .modal.open { display: flex; }
+  .sheet { background: var(--bg); width: 100%; max-width: 430px; border-radius: 24px 24px 0 0; padding: 32px 24px 40px; text-align: left; animation: up .35s ease; }
+  @keyframes up { from { transform: translateY(100%); } }
+  .sheet h4 { text-align: center; font-size: 18px; margin-bottom: 24px; }
+  .seg { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+  .seg label { border: 1px solid var(--line); border-radius: 12px; padding: 12px; text-align: center; font-size: 14px; cursor: pointer; }
+  .seg input { display: none; }
+  .seg input:checked + span { color: var(--accent); font-weight: 700; }
+  .seg label:has(input:checked) { border-color: var(--accent); background: #fff; }
+  .field { width: 100%; padding: 14px; border: 1px solid var(--line); border-radius: 12px; margin-bottom: 10px; font: inherit; background: #fff; }
+
+  footer { padding: 48px 28px 64px; text-align: center; }
+  footer .script { font-size: 34px; }
+  .share { display: flex; gap: 8px; margin-top: 24px; }
+  .share button { flex: 1; padding: 14px 0; border-radius: 999px; font-size: 14px; border: 1px solid var(--line); background: #fff; }
+  .share .kakao { background: #fee500; border-color: #fee500; color: #191919; }
+</style>
+</head>
+<body>
+<div class="petals" id="petals"></div>
+<div class="wrap">
+
+  <header class="hero">
+    <p class="script script-top reveal">Our Wedding Day</p>
+    <div class="arch reveal"><img src="https://picsum.photos/seed/romantic-main/700/980" alt="메인 사진"></div>
+    <p class="names reveal">길동<span>&amp;</span>정은</p>
+    <p class="when reveal">2027. 02. 21 SUN 4:00 PM<br>OO웨딩홀 OO홀</p>
+  </header>
+
+  <section style="padding-top:24px">
+    <div class="card reveal">
+      <h2 class="title">Invitation</h2>
+      <h3 class="sub" style="margin-bottom:28px">초대합니다</h3>
+      <p class="poem">
+        봄날의 햇살처럼 따뜻한 사람을 만나<br>
+        사계절을 함께 보냈습니다.<br><br>
+        이제 남은 모든 계절을<br>
+        함께 걸어가려 합니다.<br><br>
+        저희의 첫 걸음에 오셔서<br>
+        따뜻한 마음으로 축복해 주세요.
+      </p>
+      <p class="hand">길동 &amp; 정은 드림</p>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <h2 class="title reveal">Groom &amp; Bride</h2>
+    <h3 class="sub reveal">신랑 &amp; 신부</h3>
+    <div class="couple reveal">
+      <div class="person">
+        <img src="https://picsum.photos/seed/groom-p/300/300" alt="신랑">
+        <p class="role">GROOM</p>
+        <p class="nm">홍길동</p>
+        <p class="parents">홍철수 · 박영희의 장남</p>
+      </div>
+      <div class="person">
+        <img src="https://picsum.photos/seed/bride-p/300/300" alt="신부">
+        <p class="role">BRIDE</p>
+        <p class="nm">엄정은</p>
+        <p class="parents">엄정호 · 최미경의 장녀</p>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:var(--sub)">
+    <h2 class="title reveal">Save the Date</h2>
+    <h3 class="sub reveal">2027년 2월 21일 일요일 오후 4시</h3>
+    <div class="calendar-card reveal">
+      <p class="month">February 2027</p>
+      <div data-calendar></div>
+    </div>
+    <span class="dday-pill reveal">우리가 만나는 날까지 <b data-dday></b></span>
+  </section>
+
+  <section>
+    <h2 class="title reveal">Gallery</h2>
+    <h3 class="sub reveal">사진을 눌러 크게 보세요</h3>
+    <div class="slider reveal" data-gallery id="slider">
+      <img src="https://picsum.photos/seed/rm1/600/800" alt="">
+      <img src="https://picsum.photos/seed/rm2/600/800" alt="">
+      <img src="https://picsum.photos/seed/rm3/600/800" alt="">
+      <img src="https://picsum.photos/seed/rm4/600/800" alt="">
+      <img src="https://picsum.photos/seed/rm5/600/800" alt="">
+      <img src="https://picsum.photos/seed/rm6/600/800" alt="">
+    </div>
+    <div class="dots" id="dots"></div>
+  </section>
+
+  <section style="background:var(--sub)">
+    <h2 class="title reveal">Location</h2>
+    <h3 class="sub reveal" style="margin-bottom:8px">OO웨딩홀 OO홀</h3>
+    <p class="reveal" style="font-size:13px;opacity:.7">주소 확정 후 안내 예정</p>
+    <div class="map reveal" style="--map-a:#f0e2d8;--map-b:#f7eee7">지도 영역</div>
+    <div class="map-btns reveal">
+      <button style="background:#fff">네이버지도</button><button style="background:#fff">카카오맵</button><button style="background:#fff">티맵</button>
+    </div>
+    <dl class="traffic reveal">
+      <dt>지하철</dt><dd>장소 확정 후 안내 예정</dd>
+      <dt>버스</dt><dd>장소 확정 후 안내 예정</dd>
+      <dt>주차</dt><dd>장소 확정 후 안내 예정</dd>
+    </dl>
+  </section>
+
+  <section>
+    <h2 class="title reveal">R.S.V.P</h2>
+    <h3 class="sub reveal" style="margin-bottom:16px">참석 의사 전달</h3>
+    <p class="reveal" style="font-size:14px;opacity:.8;line-height:2">원활한 예식 준비를 위해<br>참석 여부를 미리 알려주시면 감사하겠습니다.</p>
+    <button class="rsvp-btn reveal" onclick="document.getElementById('rsvp').classList.add('open')">참석 의사 전달하기</button>
+  </section>
+
+  <section style="padding-top:0">
+    <h2 class="title reveal">With Heart</h2>
+    <h3 class="sub reveal">마음 전하실 곳</h3>
+    <div class="acc reveal" style="background:#fff">
+      <button data-acc>신랑측에게</button>
+      <div class="acc-body">
+        <div class="acc-row"><div>홍길동<small>국민 000000-00-000000</small></div><button class="copy-btn" data-copy="국민 000000-00-000000">복사</button></div>
+        <div class="acc-row"><div>홍철수<small>신한 000-000-000000</small></div><button class="copy-btn" data-copy="신한 000-000-000000">복사</button></div>
+      </div>
+    </div>
+    <div class="acc reveal" style="background:#fff">
+      <button data-acc>신부측에게</button>
+      <div class="acc-body">
+        <div class="acc-row"><div>엄정은<small>카카오뱅크 0000-00-0000000</small></div><button class="copy-btn" data-copy="카카오뱅크 0000-00-0000000">복사</button></div>
+        <div class="acc-row"><div>엄정호<small>하나 000-000000-00000</small></div><button class="copy-btn" data-copy="하나 000-000000-00000">복사</button></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p class="script reveal">Thank you</p>
+    <div class="share">
+      <button class="kakao" data-share="kakao">카카오톡 공유</button>
+      <button data-share="link">링크 복사</button>
+    </div>
+  </footer>
+</div>
+
+<!-- RSVP 바텀시트 -->
+<div class="modal" id="rsvp" onclick="if(event.target===this)this.classList.remove('open')">
+  <form class="sheet" onsubmit="event.preventDefault();this.parentElement.classList.remove('open');showToast('전달되었습니다. 감사합니다');">
+    <h4>참석 의사 전달</h4>
+    <div class="seg">
+      <label><input type="radio" name="side" checked><span>신랑측</span></label>
+      <label><input type="radio" name="side"><span>신부측</span></label>
+    </div>
+    <div class="seg">
+      <label><input type="radio" name="go" checked><span>참석할게요</span></label>
+      <label><input type="radio" name="go"><span>어려워요</span></label>
+    </div>
+    <input class="field" placeholder="성함" required>
+    <input class="field" type="number" min="1" placeholder="동행 인원 (본인 포함)">
+    <button class="rsvp-btn" style="margin-top:12px">전달하기</button>
+  </form>
+</div>
+
+<script>
+  window.WEDDING = { date: '2027-02-21T16:00:00+09:00' };
+  // 꽃잎
+  const p = document.getElementById('petals');
+  for (let i = 0; i < 14; i++) {
+    const e = document.createElement('i');
+    e.style.left = Math.random() * 100 + '%';
+    e.style.animationDuration = 8 + Math.random() * 8 + 's';
+    e.style.animationDelay = -Math.random() * 12 + 's';
+    e.style.transform = `scale(${.6 + Math.random() * .6})`;
+    p.appendChild(e);
+  }
+  // 슬라이더 점
+  const s = document.getElementById('slider'), d = document.getElementById('dots');
+  const n = s.children.length;
+  d.innerHTML = '<i></i>'.repeat(n);
+  const upd = () => {
+    const i = Math.round(s.scrollLeft / (s.children[1].offsetLeft - s.children[0].offsetLeft));
+    [...d.children].forEach((el, k) => el.classList.toggle('on', k === Math.min(i, n - 1)));
+  };
+  s.addEventListener('scroll', upd, { passive: true }); upd();
+</script>
+<script src="assets/common.js"></script>
+</body>
+</html>

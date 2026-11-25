@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>모바일 청첩장 시안 비교</title>
+<style>
+  body { margin: 0; font-family: system-ui, sans-serif; background: #f1efec; color: #333; }
+  h1 { text-align: center; font-weight: 500; font-size: 20px; margin: 32px 0 8px; }
+  p.d { text-align: center; font-size: 13px; opacity: .6; margin: 0 0 24px; }
+  .row { display: flex; gap: 32px; justify-content: center; flex-wrap: wrap; padding: 0 16px 48px; }
+  .item { text-align: center; }
+  .item h2 { font-size: 15px; font-weight: 600; margin: 0 0 4px; }
+  .item span { font-size: 12px; opacity: .6; display: block; margin-bottom: 12px; }
+  .phone { width: 375px; height: 760px; border: 10px solid #222; border-radius: 40px; overflow: hidden; background: #fff; box-shadow: 0 20px 40px -20px rgba(0,0,0,.4); }
+  .phone iframe { width: 100%; height: 100%; border: 0; }
+  .item a { display: inline-block; margin-top: 12px; font-size: 13px; color: #8c7b6b; }
+  @media (max-width: 420px) { .phone { width: calc(100vw - 32px); } }
+</style>
+</head>
+<body>
+  <h1>모바일 청첩장 시안</h1>
+  <p class="d">각 화면 안에서 스크롤하거나, 아래 링크로 단독 페이지를 열어 확인하세요.</p>
+  <div class="row">
+    <div class="item"><h2>A. Classic</h2><span>화이트 · 명조 · 정갈한 기본형</span><div class="phone"><iframe src="design1-classic.html"></iframe></div><a href="design1-classic.html" target="_blank">단독으로 열기</a></div>
+    <div class="item"><h2>B. Romantic</h2><span>아이보리 · 아치 프레임 · 꽃잎</span><div class="phone"><iframe src="design2-romantic.html"></iframe></div><a href="design2-romantic.html" target="_blank">단독으로 열기</a></div>
+    <div class="item"><h2>C. Modern</h2><span>다크 · 흑백 사진 · 매거진형</span><div class="phone"><iframe src="design3-modern.html"></iframe></div><a href="design3-modern.html" target="_blank">단독으로 열기</a></div>
+    <div class="item"><h2>D. Perfect Duet</h2><span>플루트 × 골프 · 그린 · 오선지</span><div class="phone"><iframe src="design4-duet.html"></iframe></div><a href="design4-duet.html" target="_blank">단독으로 열기</a></div>
+  </div>
+</body>
+</html>
