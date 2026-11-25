@@ -1,17 +1,14 @@
 /**
- * 모바일 청첩장 서버 (Google Apps Script)
+ * 모바일 청첩장 방명록 서버 (Google Apps Script)
  * - 방명록: 구글 드라이브의 JSON 파일 하나(wedding-guestbook.json)에 저장. DB 없음
- * - 참석 회신: 구글 시트(청첩장 참석 회신)에 한 줄씩 추가
  * 설치 방법은 같은 폴더의 README.md 참고
  */
 const GB_FILE_NAME = 'wedding-guestbook.json';
-const RSVP_SHEET_NAME = '청첩장 참석 회신';
 const props = PropertiesService.getScriptProperties();
 
 // 최초 1회 실행: 권한 승인 + 파일 생성. 실행 로그에 파일 주소가 찍힘
 function setup() {
   Logger.log('방명록 JSON: ' + gbFile().getUrl());
-  Logger.log('참석 회신 시트: ' + rsvpSheet().getParent().getUrl());
 }
 
 function doGet(e) {
@@ -45,10 +42,6 @@ function doPost(e) {
       return out({ ok: true, entries: publicList(list) });
     }
 
-    if (d.type === 'rsvp') {
-      rsvpSheet().appendRow([new Date(), clean(d.side, 10), clean(d.attend, 10), clean(d.meal, 10), clean(d.name, 20), Math.min(20, Number(d.count) || 1)]);
-      return out({ ok: true });
-    }
 
     return out({ ok: false, error: 'unknown type' });
   } finally {
@@ -74,17 +67,6 @@ function publicList(list) {
              .sort(function (a, b) { return a.at < b.at ? 1 : -1; });
 }
 
-/* ---------- 참석 회신 시트 ---------- */
-function rsvpSheet() {
-  const id = props.getProperty('RSVP_SHEET_ID');
-  if (id) return SpreadsheetApp.openById(id).getSheets()[0];
-  const ss = SpreadsheetApp.create(RSVP_SHEET_NAME);
-  props.setProperty('RSVP_SHEET_ID', ss.getId());
-  const sh = ss.getSheets()[0];
-  sh.appendRow(['시각', '구분', '참석', '식사', '성함', '인원']);
-  sh.setFrozenRows(1);
-  return sh;
-}
 
 /* ---------- 공통 ---------- */
 function hash(pw) {

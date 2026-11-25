@@ -43,12 +43,6 @@
   .sec-head h2 { font-family: var(--en); font-weight: 400; font-size: 32px; color: var(--accent); line-height: 1.2; }
   .sec-head p { font-size: 14px; color: var(--muted); margin-top: 6px; }
 
-  /* 상단 진행바: 공이 깃발로 굴러감 */
-  .progress { position: fixed; top: 0; left: 0; right: 0; max-width: 430px; margin: 0 auto; height: 26px; z-index: 50; pointer-events: none; }
-  .progress .track { position: absolute; left: 14px; right: 30px; top: 15px; height: 1px; background: rgba(47,86,65,.18); }
-  .progress .ball { position: absolute; top: 9px; left: 14px; width: 12px; height: 12px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.25), inset -2px -2px 3px rgba(0,0,0,.08); transition: left .1s linear; }
-  .progress .flag { position: absolute; right: 12px; top: 2px; width: 16px; height: 22px; }
-
   /* 메인 */
   .hero { text-align: center; padding: 72px 0 0; position: relative; }
   .hero .kicker { font-family: var(--en); font-style: italic; color: var(--gold); font-size: 16px; animation: up 1s .2s both; }
@@ -118,22 +112,12 @@
   .tee .note-line { margin-top: 24px; font-size: 14px; }
   .tee .note-line strong { color: var(--gold); }
 
-  /* 스코어카드 = 식순 */
-  /* RSVP */
-  .rsvp-card { background: #fff; border-radius: var(--radius); padding: 36px 24px 28px; box-shadow: 0 12px 28px -22px rgba(47,86,65,.6); }
-  .rsvp-card p { font-size: 14px; line-height: 2.1; }
-  .rsvp-info { display: flex; justify-content: center; gap: 10px; margin: 22px 0 24px; font-family: var(--en); font-size: 13px; letter-spacing: .12em; color: var(--accent); }
-  .rsvp-info span + span::before { content: '·'; margin-right: 10px; color: var(--gold); }
-  .rsvp-btn { display: block; width: 100%; padding: 15px; border-radius: 999px; background: var(--green); color: #f1ece0; font-size: 15px; }
+  .btn-main { display: block; width: 100%; padding: 15px; border-radius: 999px; background: var(--green); color: #f1ece0; font-size: 15px; }
   .modal { position: fixed; inset: 0; background: rgba(30,40,35,.5); display: none; align-items: flex-end; justify-content: center; z-index: 80; }
   .modal.open { display: flex; }
   .sheet { background: var(--bg); width: 100%; max-width: 430px; border-radius: 22px 22px 0 0; padding: 30px 24px 36px; text-align: left; animation: sheetUp .35s ease; }
   @keyframes sheetUp { from { transform: translateY(100%); } }
   .sheet h4 { text-align: center; font-size: 18px; font-weight: 400; margin-bottom: 22px; }
-  .seg { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
-  .seg label { border: 1px solid var(--line); border-radius: 12px; padding: 12px; text-align: center; font-size: 14px; cursor: pointer; background: #fff; }
-  .seg input { display: none; }
-  .seg label:has(input:checked) { border-color: var(--green); color: var(--green); font-weight: 700; }
   .field { width: 100%; padding: 14px; border: 1px solid var(--line); border-radius: 12px; margin-bottom: 10px; font: inherit; background: #fff; }
 
   /* 갤러리 */
@@ -176,17 +160,20 @@
   /* 바텀시트: 아이폰 하단 홈바 영역 확보, 키보드 올라올 때 스크롤 */
   .sheet { max-height: 92vh; overflow-y: auto; padding-bottom: calc(36px + env(safe-area-inset-bottom)); }
   .sheet .sub { text-align: center; font-size: 13px; color: var(--muted); margin: -14px 0 18px; }
-  .rsvp-btn:disabled { opacity: .55; }
+  .btn-main:disabled { opacity: .55; }
+
+  /* 오른쪽 내비: 페어웨이 선 위로 골프공이 굴러가고 마지막엔 홀컵으로 */
+  .pager { gap: 12px; }
+  .pager::before { content: ''; position: absolute; left: 50%; top: 3px; bottom: 14px; width: 1px; background: rgba(47,86,65,.22); transform: translateX(-50%); z-index: -1; }
+  .pager button { width: 6px; height: 6px; background: #d8cfba; box-shadow: 0 0 0 2px rgba(247,243,234,.9); }
+  .pager button.on { height: 6px; background: var(--gold); }
+  .pager .gball { position: absolute; left: 50%; top: 0; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; pointer-events: none;
+    background: radial-gradient(circle at 35% 30%, #fff 0 45%, #e4dfd3 100%); box-shadow: 0 1px 3px rgba(0,0,0,.35); transition: top .15s linear, transform .3s; }
+  .pager .gball.cup { transform: scale(.7); }
+  .pager .gflag { width: 14px; height: 20px; margin-top: 2px; margin-left: 10px; }
 </style>
 </head>
 <body>
-
-<!-- 진행바: 골프공이 깃발까지 -->
-<div class="progress" aria-hidden="true">
-  <div class="track"></div>
-  <div class="ball" id="ball"></div>
-  <svg class="flag" viewBox="0 0 16 22"><line x1="3" y1="1" x2="3" y2="21" stroke="#33403a" stroke-width="1.2"/><path d="M3.5 1.5 L14 5 L3.5 8.5 Z" fill="#b5694f"/><ellipse cx="3" cy="21" rx="3" ry="1" fill="#33403a" opacity=".4"/></svg>
-</div>
 
 <!-- 플루트와 골프채가 교차한 문장 (선 그림) -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -332,21 +319,6 @@
     <p class="note-line reveal">두 사람의 티오프까지 <strong data-dday></strong></p>
   </section>
 
-  <!-- 참석 의사 전달 -->
-  <section>
-    <div class="sec-head reveal">
-      <p class="kicker">R.S.V.P</p>
-      <h2 class="ko">참석 의사 전달</h2>
-    </div>
-    <div class="rsvp-card reveal">
-      <p>축하의 마음으로 참석해 주시는 분들을<br>더욱 정성껏 모실 수 있도록<br>참석 여부를 미리 알려주시면 감사하겠습니다.</p>
-      <div class="rsvp-info">
-        <span>2027. 02. 21 SUN</span><span>PM 4:00</span>
-      </div>
-      <button class="rsvp-btn" onclick="document.getElementById('rsvp').classList.add('open')">참석 의사 전달하기</button>
-    </div>
-  </section>
-
   <!-- 갤러리 -->
   <section data-nav="Gallery" style="background-color:var(--sub);padding-left:20px;padding-right:20px">
     <div class="sec-head reveal">
@@ -418,7 +390,7 @@
     </div>
     <div class="gb-list" id="gbList"><p class="gb-empty">불러오는 중…</p></div>
     <button class="gb-more" id="gbMore" hidden>더보기</button>
-    <button class="rsvp-btn gb-write" onclick="document.getElementById('gbWrite').classList.add('open')">축하 메시지 남기기</button>
+    <button class="btn-main gb-write" onclick="document.getElementById('gbWrite').classList.add('open')">축하 메시지 남기기</button>
   </section>
 
   <footer>
@@ -432,19 +404,6 @@
   </footer>
 </div>
 
-<!-- 참석 의사 바텀시트 -->
-<div class="modal" id="rsvp">
-  <form class="sheet" id="rsvpForm">
-    <h4>참석 의사 전달</h4>
-    <div class="seg"><label><input type="radio" name="side" value="신랑측" checked>신랑측</label><label><input type="radio" name="side" value="신부측">신부측</label></div>
-    <div class="seg"><label><input type="radio" name="attend" value="참석" checked>참석</label><label><input type="radio" name="attend" value="불참">불참</label></div>
-    <div class="seg"><label><input type="radio" name="meal" value="식사 예정" checked>식사 예정</label><label><input type="radio" name="meal" value="식사 안 함">식사 안 함</label></div>
-    <input class="field" name="name" placeholder="성함" maxlength="20" required>
-    <input class="field" name="count" type="number" min="1" max="20" inputmode="numeric" placeholder="동행 인원 (본인 포함)">
-    <button class="rsvp-btn" style="margin-top:8px">전달하기</button>
-  </form>
-</div>
-
 <!-- 방명록 작성 -->
 <div class="modal" id="gbWrite">
   <form class="sheet" id="gbForm">
@@ -452,7 +411,7 @@
     <input class="field" name="name" placeholder="성함" maxlength="20" required>
     <input class="field" name="pw" type="password" placeholder="비밀번호 (삭제할 때 필요, 4자 이상)" minlength="4" maxlength="20" required autocomplete="new-password">
     <textarea class="field" name="msg" placeholder="축하 메시지 (300자 이내)" maxlength="300" required></textarea>
-    <button class="rsvp-btn" style="margin-top:8px">남기기</button>
+    <button class="btn-main" style="margin-top:8px">남기기</button>
   </form>
 </div>
 
@@ -462,14 +421,14 @@
     <h4>메시지 삭제</h4>
     <p class="sub">작성할 때 입력한 비밀번호를 입력해 주세요</p>
     <input class="field" name="pw" type="password" placeholder="비밀번호" required autocomplete="current-password">
-    <button class="rsvp-btn" style="margin-top:8px">삭제하기</button>
+    <button class="btn-main" style="margin-top:8px">삭제하기</button>
   </form>
 </div>
 
 <script>
   window.WEDDING = {
     date: '2027-02-21T16:00:00+09:00',
-    // 방명록/참석 회신 저장 주소 (Google Apps Script 웹 앱 URL). 비어 있으면 data/guestbook.json 을 읽기만 함
+    // 방명록 저장 주소 (Google Apps Script 웹 앱 URL). 비어 있으면 data/guestbook.json 을 읽기만 함
     api: '',
     // 카카오 개발자 JavaScript 키. 비어 있으면 휴대폰 기본 공유창을 띄움
     kakaoKey: '',
@@ -500,20 +459,6 @@
     const btn = form.querySelector('button'); btn.disabled = true;
     try { await fn(); } finally { btn.disabled = false; }
   }
-
-  // 참석 의사
-  document.getElementById('rsvpForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const f = e.target, d = Object.fromEntries(new FormData(f));
-    submitting(f, async () => {
-      if (WEDDING.api) {
-        try { await api({ type: 'rsvp', ...d, count: Number(d.count) || 1 }); }
-        catch { return showToast('전송에 실패했습니다. 잠시 후 다시 시도해 주세요'); }
-      }
-      f.reset(); closeSheet('rsvp');
-      showToast(WEDDING.api ? '전달되었습니다. 감사합니다' : '미리보기: 저장 주소 연결 후 실제로 전달됩니다');
-    });
-  });
 
   // 방명록
   (function () {
@@ -572,16 +517,39 @@
     });
   })();
 
-  // 진행바
-  const ball = document.getElementById('ball');
-  const onScroll = () => {
-    const max = document.documentElement.scrollHeight - innerHeight;
-    const p = max > 0 ? Math.min(1, scrollY / max) : 0;
-    const w = Math.min(innerWidth, 430) - 14 - 34;
-    ball.style.left = (14 + p * w) + 'px';
-  };
-  addEventListener('scroll', onScroll, { passive: true }); addEventListener('resize', onScroll); onScroll();
 </script>
 <script src="assets/common.js"></script>
+<script>
+  // 오른쪽 내비에 골프공: 스크롤에 맞춰 점 사이를 굴러가고, 맨 끝에서는 깃발 홀컵으로
+  (function () {
+    const pager = document.querySelector('.pager');
+    if (!pager) return;
+    const dots = Array.from(pager.querySelectorAll('button'));
+    const secs = Array.from(document.querySelector('.wrap').children)
+      .filter((el) => el.offsetHeight >= 120 && /^(HEADER|SECTION|FOOTER)$/.test(el.tagName));
+    pager.insertAdjacentHTML('beforeend', '<svg class="gflag" viewBox="0 0 14 20" aria-hidden="true"><line x1="2" y1="1" x2="2" y2="18" stroke="#a08a5c" stroke-width="1.3"/><path d="M2.6 1.5 L13 5 L2.6 8.5 Z" fill="#b5694f"/><ellipse cx="2" cy="18.6" rx="3.2" ry="1.1" fill="#1f3a2b" opacity=".55"/></svg><span class="gball"></span>');
+    const ball = pager.querySelector('.gball'), flag = pager.querySelector('.gflag');
+    const topOf = (el) => el.getBoundingClientRect().top + scrollY;
+    const rel = (el) => el.getBoundingClientRect(), base = () => rel(pager).top;
+    const cy = (el) => { const r = rel(el); return r.top + r.height / 2 - base(); };
+    function place() {
+      if (scrollY >= document.documentElement.scrollHeight - innerHeight - 2) {
+        ball.style.top = (rel(flag).bottom - base() - 3) + 'px';   // 홀인
+        ball.classList.add('cup');
+        return;
+      }
+      ball.classList.remove('cup');
+      const mid = scrollY + innerHeight * 0.4;
+      let i = 0;
+      secs.forEach((el, k) => { if (topOf(el) <= mid) i = k; });
+      const f = Math.min(1, Math.max(0, (mid - topOf(secs[i])) / secs[i].offsetHeight));
+      const y0 = cy(dots[i]), y1 = dots[i + 1] ? cy(dots[i + 1]) : y0;
+      ball.style.top = (y0 + (y1 - y0) * f) + 'px';
+    }
+    addEventListener('scroll', place, { passive: true });
+    addEventListener('resize', place);
+    place();
+  })();
+</script>
 </body>
 </html>
