@@ -107,39 +107,23 @@
   document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
 })();
 
-/* 섹션 단위 스크롤 + 오른쪽 점 내비게이션 (시안 공통) */
+/* 섹션 단위 스크롤 + 오른쪽 점 내비게이션 (시안 공통)
+   - 섹션(화면 한 장)마다 한 번만 멈춤
+   - 화면보다 긴 섹션은 안에서 자연스럽게 스크롤되고, 끝에 닿으면 다음 섹션으로 넘어감 */
 (function () {
   const wrap = document.querySelector('.wrap');
   if (!wrap) return;
-  const MIN_PANEL = 120;   // 이보다 낮은 요소(구분선 등)는 멈춤 지점에서 제외
-  const DURATION = 750;
+  const MIN_PANEL = 120;   // 이보다 낮은 요소(구분선 등)는 섹션으로 치지 않음
+  const DURATION = 700;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const panels = () => Array.from(wrap.children).filter((el) => el.offsetHeight >= MIN_PANEL);
   const topOf = (el) => el.getBoundingClientRect().top + scrollY;
   const maxY = () => document.documentElement.scrollHeight - innerHeight;
 
-  // 멈춤 지점: 각 패널의 시작, 화면보다 긴 패널은 한 화면씩 나눠서 멈춤
-  function stops() {
-    const vh = innerHeight, out = [];
-    panels().forEach((el) => {
-      const t = topOf(el), b = t + el.offsetHeight;
-      out.push(t);
-      if (el.offsetHeight - vh > vh * 0.15) {   // 살짝 넘치는 정도(대부분 여백)는 한 화면으로 취급
-        for (let y = t + vh * 0.85; y < b - vh; y += vh * 0.85) out.push(y);
-        out.push(b - vh);
-      }
-    });
-    out.push(maxY());
-    return out.map((y) => Math.round(Math.min(Math.max(0, y), maxY())))
-      .sort((a, b) => a - b)
-      .filter((y, i, a) => i === 0 || y - a[i - 1] > 40)
-      .map((y, i, a) => (i === a.length - 1 ? maxY() : y));   // 마지막 칸은 항상 페이지 끝
-  }
-
   let animating = false;
   function scrollToY(y) {
-    y = Math.min(Math.max(0, y), maxY());
+    y = Math.min(Math.max(0, Math.round(y)), maxY());
     if (reduce) { scrollTo(0, y); return; }
     const from = scrollY, d = y - from, t0 = performance.now();
     if (Math.abs(d) < 2) return;
@@ -152,50 +136,71 @@
     })(t0);
   }
 
-  function go(dir) {
-    const s = stops(), y = scrollY;
-    const target = dir > 0 ? s.find((v) => v > y + 5) : [...s].reverse().find((v) => v < y - 5);
-    if (target !== undefined) scrollToY(target);
+  // dir 방향으로 갈 목표 위치. null이면 긴 섹션 안이라 기본 스크롤에 맡김
+  function plan(dir) {
+    const ps = panels(), y = scrollY, vh = innerHeight;
+    let i = 0;
+    ps.forEach((p, k) => { if (topOf(p) <= y + 5) i = k; });
+    const t = topOf(ps[i]), b = t + ps[i].offsetHeight;
+    if (dir > 0) {
+      if (b > y + vh + 5) return null;
+      return ps[i + 1] ? topOf(ps[i + 1]) : maxY();
+    }
+    if (t < y - 5) return null;
+    const prev = ps[i - 1];
+    if (!prev) return 0;
+    const pt = topOf(prev);
+    return Math.max(pt, pt + prev.offsetHeight - vh);  // 긴 섹션이면 그 끝 화면으로
   }
 
   const blocked = () => document.querySelector('.modal.open, .lightbox.open');
 
-  // 마우스 휠 / 트랙패드: 한 번의 제스처에 한 칸만 이동
-  let lastWheel = 0, consumed = false, acc = 0;
+  // 마우스 휠 / 트랙패드: 한 번의 제스처에 한 섹션만 이동
+  let lastWheel = 0, consumed = false, native = false, acc = 0;
   addEventListener('wheel', (e) => {
     if (blocked() || e.ctrlKey) return;
-    e.preventDefault();
     const now = Date.now(), gap = now - lastWheel;
     lastWheel = now;
-    if (animating) return;
-    if (gap > 220) { consumed = false; acc = 0; }
-    if (consumed) return;
+    if (gap > 220) { consumed = false; native = false; acc = 0; }
+    if (native) return;
+    if (animating || consumed) { e.preventDefault(); return; }
+    const dir = Math.sign(e.deltaY);
+    if (!dir) return;
+    const target = plan(dir);
+    if (target === null) { native = true; return; }
+    e.preventDefault();
     acc += e.deltaY;
-    if (Math.abs(acc) > 25) { go(Math.sign(acc)); consumed = true; acc = 0; }
+    if (Math.abs(acc) > 25) { scrollToY(target); consumed = true; acc = 0; }
   }, { passive: false });
 
-  // 터치: 세로 스와이프만 가로채고 가로 스와이프(갤러리 슬라이더)는 그대로 둠
-  let sx = 0, sy = 0, vertical = null;
+  // 터치: 세로 스와이프만 처리, 가로 스와이프(갤러리 슬라이더)는 그대로 둠
+  let sx = 0, sy = 0, mode = null, target = null;
   addEventListener('touchstart', (e) => {
-    sx = e.touches[0].clientX; sy = e.touches[0].clientY; vertical = null;
+    sx = e.touches[0].clientX; sy = e.touches[0].clientY; mode = null;
   }, { passive: true });
   addEventListener('touchmove', (e) => {
     if (blocked()) return;
     const dx = e.touches[0].clientX - sx, dy = e.touches[0].clientY - sy;
-    if (vertical === null && (Math.abs(dx) > 6 || Math.abs(dy) > 6)) vertical = Math.abs(dy) > Math.abs(dx);
-    if (vertical) e.preventDefault();
+    if (mode === null && (Math.abs(dx) > 6 || Math.abs(dy) > 6)) {
+      if (Math.abs(dx) >= Math.abs(dy)) mode = 'x';
+      else { target = plan(dy < 0 ? 1 : -1); mode = target === null ? 'native' : 'snap'; }
+    }
+    if (mode === 'snap') e.preventDefault();
   }, { passive: false });
   addEventListener('touchend', (e) => {
-    if (blocked() || !vertical || animating) return;
-    const dy = e.changedTouches[0].clientY - sy;
-    if (Math.abs(dy) > 40) go(dy < 0 ? 1 : -1);
+    if (blocked() || mode !== 'snap' || animating) return;
+    if (Math.abs(e.changedTouches[0].clientY - sy) > 40) scrollToY(target);
   });
 
   // 키보드
   addEventListener('keydown', (e) => {
     if (blocked() || /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) return;
-    if (['ArrowDown', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); if (!animating) go(1); }
-    if (['ArrowUp', 'PageUp'].includes(e.key)) { e.preventDefault(); if (!animating) go(-1); }
+    const dir = ['ArrowDown', 'PageDown', ' '].includes(e.key) ? 1 : ['ArrowUp', 'PageUp'].includes(e.key) ? -1 : 0;
+    if (!dir) return;
+    const t = plan(dir);
+    if (t === null) return;
+    e.preventDefault();
+    if (!animating) scrollToY(t);
   });
 
   // 오른쪽 점 내비게이션
