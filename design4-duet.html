@@ -192,9 +192,10 @@
   .sec-head .kicker, .hero .kicker { letter-spacing: .02em; }
   .countdown b, .cal-body, .cal-head, .gb-item .when, .rsvp-info, .acc-row small { font-variant-numeric: tabular-nums lining-nums; }
 
-  /* 섹션 머리: 제목과 한글 부제 사이에 짧은 금색 선 */
+  /* 섹션 머리: 제목 바로 아래 짧은 금색 선 (모든 섹션 동일) */
   .sec-head p { letter-spacing: .02em; }
-  .sec-head p::before { content: ''; display: block; width: 22px; height: 1px; margin: 14px auto 10px; background: var(--gold); opacity: .7; }
+  .sec-head h2::after { content: ''; display: block; width: 22px; height: 1px; margin: 14px auto 0; background: var(--gold); opacity: .7; }
+  .sec-head p:not(.kicker) { margin-top: 10px; }
 
   /* 카드 공통: 같은 바탕·테두리·그림자 */
   .pcard, .gb-item, .acc, .cal-card { background: var(--card); box-shadow: var(--shadow); border: 1px solid var(--hair); }
