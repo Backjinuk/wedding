@@ -50,8 +50,8 @@
   .hero .kicker { font-family: var(--en); font-style: italic; color: var(--gold); font-size: 17px; animation: up 1s .2s both; }
   .hero h1 { font-family: var(--en); font-weight: 400; font-size: 48px; line-height: 1.05; color: var(--accent); margin-top: 6px; animation: up 1s .35s both; }
   .hero h1 em { font-style: italic; color: var(--gold); }
-  .hero-photo { margin: 36px 28px 0; position: relative; animation: up 1.2s .5s both; }
-  .hero-photo img { width: 100%; aspect-ratio: 4/5; object-fit: cover; border-radius: 200px 200px 14px 14px; }
+  .hero-photo { margin: 36px 0 0; position: relative; animation: up 1.2s .5s both; }   /* 모바일 청첩장답게 사진을 화면 폭 가득 */
+  .hero-photo img { width: 100%; aspect-ratio: 4/5; object-fit: cover; }
   .hero-staff { display: block; width: 100%; height: auto; margin-top: 6px; position: relative; }
   /* 첫 화면 연출: 오선이 그려지고 → 음표가 내려앉고 → 공이 굴러 홀컵 옆에 멈춤 */
   .hero-staff .staff path { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 1.4s cubic-bezier(.6,0,.3,1) forwards; }
@@ -228,6 +228,24 @@
   .sheet::before { content: ''; position: absolute; top: 12px; left: 50%; width: 36px; height: 4px; margin-left: -18px; border-radius: 2px; background: var(--line); }
   .sheet h4 { font-weight: 700; }
 
+  /* 연락하기 버튼: 혼주 이름 아래 작은 외곽선 버튼 */
+  .contact-btn { display: inline-flex; align-items: center; gap: 6px; margin-top: 28px; padding: 10px 22px; border: 1px solid var(--hair); border-radius: 999px; background: var(--card); color: var(--accent); font-size: 14px; font-weight: 600; box-shadow: var(--shadow); }
+  .contact-btn svg { width: 14px; height: 14px; fill: var(--gold); }
+  .contact-sheet .contact-group + .contact-group { margin-top: 22px; }
+  .contact-sheet .side { font-size: 13px; font-weight: 600; color: var(--gold); padding-bottom: 8px; border-bottom: 1px solid var(--hair); }
+  .c-row { display: grid; grid-template-columns: 52px 1fr auto auto; align-items: center; gap: 8px; padding: 12px 0; border-bottom: 1px solid var(--hair); font-size: 15px; }
+  .c-row .r { font-size: 13px; color: var(--muted); }
+  .c-row .n { font-weight: 600; }
+  .c-row a { font-size: 13px; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--hair); background: var(--card); color: var(--accent); text-decoration: none; }
+
+  /* 날짜 문구: '길동 ♥ 정은의 결혼식이 N일 남았습니다' */
+  .tee .note-line { font-size: 15px; margin-top: 28px; }
+  .tee .note-line .heart { color: #d98b7a; margin: 0 2px; }
+  .tee .note-line strong { font-weight: 700; }
+
+  /* 마지막 화면 사진 */
+  .closing-photo { width: 62%; max-width: 260px; aspect-ratio: 4/5; object-fit: cover; margin: 0 auto 32px; border-radius: 999px 999px 12px 12px; border: 3px solid rgba(182,151,90,.55); }
+
   /* 움직임 줄이기 설정이면 등장 효과 없이 바로 보이게 */
   @media (prefers-reduced-motion: reduce) {
     .reveal { opacity: 1; transform: none; transition: none; }
@@ -321,6 +339,10 @@
       <span>홍철수 · 박영희</span><span class="rel">의 아들</span><b>길동</b>
       <span>엄정호 · 최미경</span><span class="rel">의 딸</span><b>정은</b>
     </div>
+    <button class="contact-btn reveal" onclick="document.getElementById('contact').classList.add('open')">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>
+      연락하기
+    </button>
   </section>
 
   <svg class="staff-div" viewBox="0 0 430 48" preserveAspectRatio="none" aria-hidden="true"><g stroke="#d9cfb8" stroke-width="1"><line x1="0" y1="12" x2="430" y2="12"/><line x1="0" y1="18" x2="430" y2="18"/><line x1="0" y1="24" x2="430" y2="24"/><line x1="0" y1="30" x2="430" y2="30"/><line x1="0" y1="36" x2="430" y2="36"/></g><g fill="#b6975a"><ellipse cx="200" cy="27" rx="4.5" ry="3.2"/><rect x="203.6" y="6" width="1.2" height="21"/><ellipse cx="230" cy="21" rx="4.5" ry="3.2"/><rect x="233.6" y="0" width="1.2" height="21"/></g></svg>
@@ -378,7 +400,7 @@
       <div><b data-u="m">00</b><small>MIN</small></div>
       <div><b data-u="s">00</b><small>SEC</small></div>
     </div>
-    <p class="note-line reveal">두 사람의 티오프까지 <strong data-dday></strong></p>
+    <p class="note-line reveal" id="ddayLine">길동 <span class="heart">♥</span> 정은의 결혼식이 <strong id="ddayDays"></strong> 남았습니다</p>
   </section>
 
   <!-- 갤러리 -->
@@ -456,7 +478,7 @@
   </section>
 
   <footer>
-    <svg class="crest reveal" viewBox="0 0 120 66" aria-hidden="true"><use href="#crest"/></svg>
+    <img class="closing-photo reveal" src="https://picsum.photos/seed/duet-end/600/760" alt="두 사람 사진" loading="lazy" decoding="async">
     <h2 class="reveal gold">Encore</h2>
     <p class="reveal">끝이 아닌 시작의 무대에<br>함께해 주셔서 감사합니다.</p>
     <div class="share reveal">
@@ -464,6 +486,25 @@
       <button data-share="link">링크 복사</button>
     </div>
   </footer>
+</div>
+
+<!-- 연락하기 -->
+<div class="modal" id="contact">
+  <div class="sheet contact-sheet">
+    <h4>연락하기</h4>
+    <div class="contact-group">
+      <p class="side">신랑측</p>
+      <div class="c-row"><span class="r">신랑</span><span class="n">홍길동</span><a href="tel:010-0000-0000" aria-label="신랑에게 전화">전화</a><a href="sms:010-0000-0000" aria-label="신랑에게 문자">문자</a></div>
+      <div class="c-row"><span class="r">아버지</span><span class="n">홍철수</span><a href="tel:010-0000-0000" aria-label="신랑 아버지에게 전화">전화</a><a href="sms:010-0000-0000" aria-label="신랑 아버지에게 문자">문자</a></div>
+      <div class="c-row"><span class="r">어머니</span><span class="n">박영희</span><a href="tel:010-0000-0000" aria-label="신랑 어머니에게 전화">전화</a><a href="sms:010-0000-0000" aria-label="신랑 어머니에게 문자">문자</a></div>
+    </div>
+    <div class="contact-group">
+      <p class="side">신부측</p>
+      <div class="c-row"><span class="r">신부</span><span class="n">엄정은</span><a href="tel:010-0000-0000" aria-label="신부에게 전화">전화</a><a href="sms:010-0000-0000" aria-label="신부에게 문자">문자</a></div>
+      <div class="c-row"><span class="r">아버지</span><span class="n">엄정호</span><a href="tel:010-0000-0000" aria-label="신부 아버지에게 전화">전화</a><a href="sms:010-0000-0000" aria-label="신부 아버지에게 문자">문자</a></div>
+      <div class="c-row"><span class="r">어머니</span><span class="n">최미경</span><a href="tel:010-0000-0000" aria-label="신부 어머니에게 전화">전화</a><a href="sms:010-0000-0000" aria-label="신부 어머니에게 문자">문자</a></div>
+    </div>
+  </div>
 </div>
 
 <!-- 방명록 작성 -->
@@ -503,6 +544,17 @@
   // 바텀시트 공통: 바깥 누르면 닫힘
   document.querySelectorAll('.modal').forEach((m) => m.addEventListener('click', (e) => { if (e.target === m) m.classList.remove('open'); }));
   const closeSheet = (id) => document.getElementById(id).classList.remove('open');
+
+  // 'N일 남았습니다' 문구 (당일·지난 뒤 문구도 처리)
+  (function () {
+    const t0 = new Date(); t0.setHours(0, 0, 0, 0);
+    const t1 = new Date(WEDDING.date); t1.setHours(0, 0, 0, 0);
+    const days = Math.round((t1 - t0) / 86400000);
+    const line = document.getElementById('ddayLine');
+    if (days > 0) document.getElementById('ddayDays').textContent = days + '일';
+    else if (days === 0) line.innerHTML = '오늘은 길동 <span class="heart">♥</span> 정은의 결혼식 날입니다';
+    else line.innerHTML = '길동 <span class="heart">♥</span> 정은이 함께한 지 <strong>' + (-days) + '일</strong>';
+  })();
 
   // 지도 앱 열기
   document.querySelectorAll('[data-map]').forEach((b) => b.addEventListener('click', () => {
